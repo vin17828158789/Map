@@ -1,0 +1,113 @@
+<template>
+  <div id="app">
+    <div id="container"></div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "app",
+  data() {
+    return {
+      map:  '',
+    positions : [
+        [104.067269,30.526641],
+        [104.061347,30.577642],
+    ],
+    anchor : [
+        '特力飞',
+        '亿格可思培训机构',
+    ],
+    pos_icon : [],
+    pos_marker : [],
+    icon : [],
+    marker : []
+    };
+  },
+  created() {
+    
+    
+  },
+  mounted(){
+    // console.log(container);
+    
+    this.map = new AMap.Map("container", {
+        zoom: 13,
+        center: [104.066541,30.572269],
+        resizeEnable: true,
+        mapStyle: 'amap://styles/d6bf8c1d69cea9f5c696185ad4ac4c86'
+    })
+    for (var i = 0; i < this.positions.length; i++) {
+        // 创建一个 Icon
+        this.pos_icon[i] = new AMap.Icon({
+            // 图标尺寸
+            size: new AMap.Size(12, 12),
+            // 图标的取图地址
+            image: '//a.amap.com/jsapi_demos/static/demo-center/marker/marker.png',
+            // 图标所用图片大小
+            imageSize: new AMap.Size(12, 12),
+        });
+
+        var labelContent = "<div class='labelContent'><span class='title'>要面试的公司:</span>"+this.anchor[i]+"</div>"
+
+        // 将 Icon 传入 marker
+        this.pos_marker[i] = new AMap.Marker({
+            position: this.positions[i],
+            icon: this.pos_icon[i],
+            anchor: 'center', //设置锚点
+            offset: new AMap.Pixel(0,0) //设置偏移量
+        });
+        this.map.add(this.pos_marker[i]);
+
+        // 创建一个 Icon
+        var imageUrl = '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png'
+
+        
+        this.icon[i] = new AMap.Icon({
+            // 图标尺寸
+            size: new AMap.Size(46, 28),
+            // 图标的取图地址
+            image: imageUrl,
+            // 图标所用图片大小
+            imageSize: new AMap.Size(46, 28),
+        });
+        // 将 Icon 传入 marker
+        var labelOffset = new AMap.Pixel(-23,-28);
+        this.marker[i] = new AMap.Marker({
+            position: this.positions[i],
+            icon: this.icon[i],
+            anchor: this.anchor[i], //设置锚点
+            offset: new AMap.Pixel(0,0), //设置偏移量
+            label: {
+                content: labelContent,
+                offset: labelOffset
+            }
+        });
+        this.map.add(this.marker[i]);
+    }
+     
+  }
+}
+</script>
+
+<style>
+html,
+body,
+#app,
+#container {
+  height: 100%;
+  width: 100%;
+}
+.amap-marker-label {
+  font-size: 23px;
+  border: 1px solid #53c4f7;
+  color: red;
+  font-weight: bold;
+  padding: 10px;
+}
+.title{
+  font-size: 16px;
+  color: #000;
+  font-weight: 0;
+}
+</style>
